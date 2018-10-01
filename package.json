@@ -9,7 +9,8 @@
     "watch:css": "sass --watch sparkline-element.scss demo/sparkline-element.min.css",
     "build:css": "sass sparkline-element.scss demo/sparkline-element.min.css -t compressed",
     "build:js": "rollup -c",
-    "build": "npm run build:css && npm run build:js"
+    "build": "npm run build:css && npm run build:js",
+    "postinstall": "npm run build"
   },
   "license": "Apache-2.0",
   "dependencies": {
