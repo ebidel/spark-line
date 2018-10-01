@@ -1,0 +1,110 @@
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 300;
+  padding: 72px;
+}
+h2 {
+  margin: 0 0 16px 0;
+  font-weight: 500;
+}
+.cards {
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+.card {
+  padding: 32px;
+  width: 25%;
+  border-right: 1px solid #ccc;
+}
+.card:last-child {
+  border: 0;
+}
+spark-line {
+  display: inline-block;
+  width: 100%;
+  height: 75px;
+}
+</style>
+<link rel="stylesheet" href="sparkline-element.min.css">
+
+<script type="module">
+  // Register element.
+  import('./sparkline-element.js').then(({SparklineElement}) => {
+  //   customElements.define(SparklineElement.getTagName(), SparklineElement);
+  });
+</script>
+
+<section class="cards">
+  <div class="card">
+    <h2>Performance</h2>
+    <spark-line values="[0,30,35,45,65,100,85,100]" fill></spark-line>
+  </div>
+  <div class="card">
+    <h2>PWA</h2>
+    <spark-line values="[95,92,85,75,75,78,75,80,65,45]" fill></spark-line>
+  </div>
+  <div class="card">
+    <h2>Acessibility</h2>
+    <spark-line values="[75,70,68,65,65,65,60]" fill></spark-line>
+  </div>
+  <div class="card">
+    <h2>SEO</h2>
+    <spark-line values="[75,70,68,65,65,55,50,40,58]" fill></spark-line>
+  </div>
+</section>
+
+<!--
+<style>
+    /* just the line */
+.sparkline {
+  stroke: red;
+  fill: none;
+}
+
+/* line with highlight area */
+.sparkline {
+  stroke: red;
+  fill: rgba(255, 0, 0, .3);
+}
+
+/* change the spot color */
+.sparkline--spot {
+  stroke: blue;
+  fill: blue;
+}
+
+/* change the cursor color */
+.sparkline--cursor {
+  stroke: orange;
+}
+
+/* style fill area and line colors using specific class name */
+.sparkline--fill {
+  fill: rgba(255, 0, 0, .3);
+}
+
+.sparkline--line {
+  stroke: red;
+}
+</style>
+<svg width="100" height="100" stroke-width="2" stroke="blue"
+     fill="rgba(0, 0, 255, .2)">
+  <path class="sparkline--fill" d="M4 14.19 L 4 14.19 L 13.2 14.21 L 22.4 13.77 L 31.599999999999998 13.99 L 40.8 13.46 L 50 11.68 L 59.199999999999996 11.35 L 68.39999999999999 10.68 L 77.6 7.11 L 86.8 7.85 L 96 4 V 20 L 4 20 Z" stroke="none"></path>
+  <path class="sparkline--line" d="M4 14.19 L 4 14.19 L 13.2 14.21 L 22.4 13.77 L 31.599999999999998 13.99 L 40.8 13.46 L 50 11.68 L 59.199999999999996 11.35 L 68.39999999999999 10.68 L 77.6 7.11 L 86.8 7.85 L 96 4" fill="none"></path>
+  <line class="sparkline--cursor" x1="-1000" x2="-1000" y1="0" y2="20" stroke-width="2"></line>
+  <circle class="sparkline--spot" cx="-1000" cy="7.11" r="2"></circle>
+  <rect width="100" height="20" style="fill:transparent;stroke:transparent;" class="sparkline--interaction-layer"></rect>
+</svg> -->
+
+<!--
+  <svg width="190" height="160" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 10 80 C 40 10, 65 10, 95 80 S 150 150, 180 80"
+        stroke="red" fill="transparent" stroke-width="3"/>
+</svg> -->
