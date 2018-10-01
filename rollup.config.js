@@ -4,17 +4,18 @@ export default [{
   input: './sparkline-element.js',
   output: {
     file: 'sparkline-element.min.js',
-    format: 'es'
+    dir: './demo',
+    format: 'es',
   },
   inlineDynamicImports: true,
   plugins: [
     terser()
   ]
 }, {
-  input: './elements/gauge-element.js',
+  input: './demo/gauge-element.js',
   output: {
     file: 'gauge-element.min.js',
-    dir: './elements',
+    dir: './demo',
     format: 'es'
   },
   inlineDynamicImports: true,

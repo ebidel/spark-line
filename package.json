@@ -6,11 +6,10 @@
   "main": "sparkline-element.js",
   "scripts": {
     "watch:js": "rollup -c --watch",
-    "watch:css": "sass --watch sparkline-element.scss sparkline-element.min.css",
-    "build:css": "sass sparkline-element.scss sparkline-element.min.css -t compressed",
+    "watch:css": "sass --watch sparkline-element.scss demo/sparkline-element.min.css",
+    "build:css": "sass sparkline-element.scss demo/sparkline-element.min.css -t compressed",
     "build:js": "rollup -c",
-    "build": "npm run build:css && npm run build:js",
-    "clean": "rm *.min.css && rm *.min.js"
+    "build": "npm run build:css && npm run build:js"
   },
   "license": "Apache-2.0",
   "dependencies": {
