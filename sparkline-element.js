@@ -24,6 +24,8 @@ class SparklineElement extends HTMLElement {
     this.padding_ = 8;
     /** @private {number} */
     this.scoreHeight_ = 15;
+    /** @private {boolean} */
+    this.showlast_ = false;
 
     /** @private {number} */
     this.width_ = null;
@@ -39,7 +41,7 @@ class SparklineElement extends HTMLElement {
    * @export
    */
   static get observedAttributes() {
-    return ['fill'];
+    return ['fill', 'showlast'];
   }
 
   /**
@@ -75,7 +77,7 @@ class SparklineElement extends HTMLElement {
   }
 
   /**
-   * @param {?boolean} val
+   * @param {boolean} val
    * @export
    */
   set fill(val) {
@@ -84,6 +86,27 @@ class SparklineElement extends HTMLElement {
       this.setAttribute('fill', '');
     } else {
       this.removeAttribute('fill');
+    }
+  }
+
+   /**
+   * @return {boolean}
+   * @export
+   */
+  get showlast() {
+    return this.showlast_;
+  }
+
+  /**
+   * @param {boolean} val
+   * @export
+   */
+  set showlast(val) {
+    this.showlast_ = Boolean(val);
+    if (this.showlast_) {
+      this.setAttribute('showlast', '');
+    } else {
+      this.removeAttribute('showlast');
     }
   }
 
@@ -101,6 +124,8 @@ class SparklineElement extends HTMLElement {
     }
     if (attr === 'fill') {
       this.fill = newValue !== null;
+    } else if (attr === 'showlast') {
+      this.showlast = newValue !== null;
     }
     this.update_();
   }
@@ -228,16 +253,18 @@ class SparklineElement extends HTMLElement {
             x1="-1000" x2="-1000" y1="0" y2="${this.height_}"
             stroke-width="1"/>
           <path d="${path}" fill="none" stroke-width="${this.stroke_}" class="path"/>
-          <!-- <circle cx="${firstPoint.x}" cy="${firstPoint.y}" r="${this.circleRadius_}"
-            fill="#fff" stroke-width="${this.stroke_}"/> -->
           <circle cx="${lastPoint.x}" cy="${lastPoint.y}" r="${this.circleRadius_}"
-            fill="#fff" stroke-width="${this.stroke_}"/>
+            fill="${this.showlast ? '#fff' : 'none'}"
+            stroke-width="${this.showlast ? this.stroke_ : 0}"/>
         </g>
-        <text id="score" x="-1000" y="-1000" class="small"></text>
+        <text id="score" x="-1000" y="-1000"></text>
       </svg>`;
 
       return template;
   }
+
+  // <!-- <circle cx="${firstPoint.x}" cy="${firstPoint.y}" r="${this.circleRadius_}"
+  // fill="#fff" stroke-width="${this.stroke_}"/> -->
 
   /**
    * Determines Lighthouse pass/average/fail coloring based on value.

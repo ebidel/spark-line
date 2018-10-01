@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>sparkline-elemenent web component demo</title>
   <link rel="stylesheet" href="sparkline-element.min.css">
+  <script type="module" src="./elements/gauge-element.min.js"></script>
   <script type="module" src="sparkline-element.min.js"></script>
   <!-- <script type="module">
       // Register element.
@@ -27,8 +28,8 @@
       font-weight: 500;
     }
     .cards {
-      display:flex;
-      align-items:center;
+      display: flex;
+      align-items: center;
       justify-content: space-between;
       border: 1px solid #ccc;
       border-radius: 3px;
@@ -45,6 +46,16 @@
       display: inline-block;
       width: 100%;
       height: 75px;
+      contain: content;
+    }
+    gauge-element {
+      --circle-size: 50px;
+      contain: content;
+    }
+    .card-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   </style>
 </head>
@@ -52,22 +63,48 @@
 
 <section class="cards">
   <div class="card">
-    <h2>Performance</h2>
-    <spark-line values="[0,30,35,45,65,100,85,100]" fill></spark-line>
+    <div class="card-title">
+      <h2>Performance</h2>
+      <gauge-element score="0"></gauge-element>
+    </div>
+    <spark-line values="[0,30,35,45,65,100,85,100]" fill showlast></spark-line>
   </div>
   <div class="card">
-    <h2>PWA</h2>
+    <div class="card-title">
+      <h2>PWA</h2>
+      <gauge-element score="0"></gauge-element>
+    </div>
     <spark-line values="[95,92,85,75,75,78,75,80,65,45]" fill></spark-line>
   </div>
   <div class="card">
-    <h2>Acessibility</h2>
-    <spark-line values="[75,70,68,65,65,65,60]" fill></spark-line>
+    <div class="card-title">
+      <h2>Accessibility</h2>
+      <gauge-element score="0"></gauge-element>
+    </div>
+    <spark-line values="[75,70,68,65,65,65,60]" fill showlast></spark-line>
   </div>
   <div class="card">
-    <h2>SEO</h2>
-    <spark-line values="[75,70,68,65,65,55,50,40,58]" fill></spark-line>
+    <div class="card-title">
+      <h2>SEO</h2>
+      <gauge-element score="0"></gauge-element>
+    </div>
+    <spark-line values="[75,70,68,65,65,55,50,40,58,80,91]" fill></spark-line>
   </div>
 </section>
+
+<script>
+Promise.all([
+  customElements.whenDefined('gauge-element'),
+  customElements.whenDefined('spark-line'),
+]).then(() => {
+  const cards = document.querySelectorAll('.card');
+  Array.from(cards).forEach(card => {
+    const line = card.querySelector('spark-line');
+    const gauge = card.querySelector('gauge-element');
+    gauge.score = line.values.slice(-1)[0] / 100;
+  });
+});
+</script>
 
 <!--
 <style>
