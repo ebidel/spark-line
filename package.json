@@ -1,7 +1,7 @@
 {
   "name": "sparkline",
   "version": "0.0.1",
-  "description": "Sparkline web component",
+  "description": "spark-line web component",
   "author": "Eric Bidelman <ebidel@>",
   "main": "sparkline-element.js",
   "scripts": {
