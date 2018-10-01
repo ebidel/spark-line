@@ -5,10 +5,18 @@
   "author": "Eric Bidelman <ebidel@>",
   "main": "sparkline-element.js",
   "scripts": {
-    "build": "./build.sh"
+    "watch:js": "rollup -c --watch",
+    "watch:css": "sass --watch sparkline-element.scss sparkline-element.min.css",
+    "build:css": "sass sparkline-element.scss sparkline-element.min.css -t compressed",
+    "build:js": "rollup -c",
+    "build": "npm run build:css && npm run build:js",
+    "clean": "rm *.min.css && rm *.min.js"
   },
   "license": "Apache-2.0",
   "dependencies": {
     "lit-html": "^0.11.4"
+  },
+  "devDependencies": {
+    "rollup-plugin-terser": "^3.0.0"
   }
 }
