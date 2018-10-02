@@ -6,8 +6,8 @@
   "main": "sparkline-element.js",
   "scripts": {
     "watch:js": "rollup -c --watch",
-    "watch:css": "sass --watch sparkline-element.scss demo/sparkline-element.min.css",
-    "build:css": "sass sparkline-element.scss demo/sparkline-element.min.css -t compressed",
+    "watch:css": "node-sass --watch sparkline-element.scss demo/sparkline-element.min.css",
+    "build:css": "node-sass sparkline-element.scss demo/sparkline-element.min.css -t compressed",
     "build:js": "rollup -c",
     "build": "npm run build:css && npm run build:js",
     "postinstall": "npm run build"
@@ -18,6 +18,8 @@
   },
   "devDependencies": {
     "lighthouse": "^3.2.1",
+    "node-sass": "^4.9.3",
+    "rollup": "^0.66.2",
     "rollup-plugin-terser": "^3.0.0"
   }
 }

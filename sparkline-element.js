@@ -21,7 +21,7 @@ class SparklineElement extends HTMLElement {
      /** @private {number} */
     this.circleRadius_ = 4;
     /** @private {number} */
-    this.padding_ = 8;
+    this.padding_ = 10;
     /** @private {number} */
     this.scoreHeight_ = 15;
     /** @private {boolean} */

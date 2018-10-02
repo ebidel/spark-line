@@ -1,5 +1,5 @@
 # spark-line
-`&lt;spark-line>` web component for making...spark lines!
+`<spark-line>` web component for making...spark lines!
 
 
 ### Usage
