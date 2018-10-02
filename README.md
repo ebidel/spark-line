@@ -1,6 +1,17 @@
-# spark-line
-`<spark-line>` web component for making...spark lines!
+# &lt;spark-line>
+`<spark-line>` is a web component for making...spark lines!
 
+It includes data points on hover and adjusts the line/fill color based 
+on thresholds score values from [Lighthouse](https://github.com/GoogleChrome/lighthouse).
+
+<img width="1005" alt="screen shot 2018-10-02 at 9 00 33 am" src="https://user-images.githubusercontent.com/238208/46361086-a8063680-c621-11e8-8db7-89e57bb6c40f.png">
+
+(Note: the Lighthhouse score gauge in the screenshot is not part of thhe component).
+
+Future work
+- Make threshold score coloring configurable.
+- Make interactivity optional.
+- Have option to show all data points.
 
 ### Usage
 
