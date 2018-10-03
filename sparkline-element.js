@@ -5,9 +5,8 @@
 import {html, render} from './node_modules/lit-html/lit-html.js';
 // import {repeat} from './lit-html/directives/repeat.js';
 
-/**
- * Example element.
- */
+const clampTo2Decimals = val => Math.round(val * 100) / 100;
+
 class SparklineElement extends HTMLElement {
   constructor() {
     super();
@@ -25,6 +24,8 @@ class SparklineElement extends HTMLElement {
     /** @private {number} */
     this.scoreHeight_ = 15;
     /** @private {boolean} */
+    this.showfirst_ = false;
+    /** @private {boolean} */
     this.showlast_ = false;
 
     /** @private {number} */
@@ -41,7 +42,7 @@ class SparklineElement extends HTMLElement {
    * @export
    */
   static get observedAttributes() {
-    return ['fill', 'showlast'];
+    return ['fill', 'showfirst', 'showlast'];
   }
 
   /**
@@ -89,7 +90,28 @@ class SparklineElement extends HTMLElement {
     }
   }
 
-   /**
+  /**
+   * @return {boolean}
+   * @export
+   */
+  get showfirst() {
+    return this.showfirst_;
+  }
+
+  /**
+   * @param {boolean} val
+   * @export
+   */
+  set showfirst(val) {
+    this.showfirst_ = Boolean(val);
+    if (this.showlast_) {
+      this.setAttribute('showfirst', '');
+    } else {
+      this.removeAttribute('showfirst');
+    }
+  }
+
+  /**
    * @return {boolean}
    * @export
    */
@@ -122,12 +144,10 @@ class SparklineElement extends HTMLElement {
     if (oldValue === newValue) {
       return;
     }
-    if (attr === 'fill') {
-      this.fill = newValue !== null;
-    } else if (attr === 'showlast') {
-      this.showlast = newValue !== null;
+    if (['fill', 'showfirst', 'showlast'].includes(attr)) {
+      this[attr] = newValue !== null;
     }
-    this.update_();
+    this.update();
   }
 
   /**
@@ -144,7 +164,7 @@ class SparklineElement extends HTMLElement {
     this.width_ = this.width_ - this.padding_ - circleDiameter;
     this.height_ = this.height_ - this.padding_ - circleDiameter - this.scoreHeight_;
 
-    this.update_();
+    this.update();
 
     this.addEventListener('mousemove', e => {
       const mouseX = event.offsetX;
@@ -162,7 +182,7 @@ class SparklineElement extends HTMLElement {
         point = prevPoint;
       }
 
-      if (point) {
+      if (point && this.cursor_ && this.score_) {
         const colorClass = this.computeColorClass_(point.score);
 
         this.cursor_.setAttribute('x1', point.x);
@@ -179,6 +199,9 @@ class SparklineElement extends HTMLElement {
     });
 
     this.addEventListener('mouseout', e => {
+      if (!(this.cursor_ && this.score_)) {
+        return;
+      }
       this.cursor_.setAttribute('x1', -1000);
       this.cursor_.setAttribute('x2', -1000);
       this.score_.setAttribute('x', -1000);
@@ -196,11 +219,11 @@ class SparklineElement extends HTMLElement {
     const max = Math.max(...this.values);
 
     const c = (x) => {
-      const s = this.height_ / (max - min);
+      const s = (max !== min) ? this.height_ / (max - min) : 1;
       return this.height_ - (s * (x - min));
     };
 
-    const offset = Math.floor(this.width_ / (this.values.length - 1));
+    const offset = this.values.length > 1 ? Math.floor(this.width_ / (this.values.length - 1)) : 0;
     let path = `M0 ${c(this.values[0]).toFixed(2)}`;
     const firstPoint = {};
     const lastPoint = {};
@@ -219,7 +242,7 @@ class SparklineElement extends HTMLElement {
         lastPoint.x = x;
         lastPoint.y = y;
       }
-      this.datapoints.push({x, y, score: val});
+      this.datapoints.push({x, y, score: clampTo2Decimals(val)});
     });
 
     return {path, firstPoint, lastPoint};
@@ -227,7 +250,7 @@ class SparklineElement extends HTMLElement {
 
   generateTemplate_() {
     // Determine color of chart based on last value.
-    const colorClass = this.computeColorClass_(this.values_.slice(-1))
+    const colorClass = this.computeColorClass_(this.values.slice(-1))
     const {path, firstPoint, lastPoint} = this.generatePath_();
 
     /** @private {!TemplateResul?t} */
@@ -253,6 +276,9 @@ class SparklineElement extends HTMLElement {
             x1="-1000" x2="-1000" y1="0" y2="${this.height_}"
             stroke-width="1"/>
           <path d="${path}" fill="none" stroke-width="${this.stroke_}" class="path"/>
+          <circle cx="${firstPoint.x}" cy="${firstPoint.y}" r="${this.circleRadius_}"
+            fill="${this.showfirst ? '#fff' : 'none'}"
+            stroke-width="${this.showfirst ? this.stroke_ : 0}"/>
           <circle cx="${lastPoint.x}" cy="${lastPoint.y}" r="${this.circleRadius_}"
             fill="${this.showlast ? '#fff' : 'none'}"
             stroke-width="${this.showlast ? this.stroke_ : 0}"/>
@@ -262,9 +288,6 @@ class SparklineElement extends HTMLElement {
 
       return template;
   }
-
-  // <!-- <circle cx="${firstPoint.x}" cy="${firstPoint.y}" r="${this.circleRadius_}"
-  // fill="#fff" stroke-width="${this.stroke_}"/> -->
 
   /**
    * Determines Lighthouse pass/average/fail coloring based on value.
@@ -285,9 +308,14 @@ class SparklineElement extends HTMLElement {
   }
 
   /**
-   * @private
+   * (Re)renders the line, gradient. Should be called when .values is changed.
+   * @export
    */
-  update_() {
+  update() {
+    if (!this.values.length) {
+      return;
+    }
+
     render(this.generateTemplate_(), this);
     this.cursor_ = this.querySelector('#cursor');
     this.score_ = this.querySelector('#score');
